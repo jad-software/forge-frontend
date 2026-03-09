@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { toast } from "sonner";
 
 export function proxy(request: NextRequest) {
   const token = request.cookies.get("Authorization");
@@ -8,9 +7,8 @@ export function proxy(request: NextRequest) {
   if (!token) {
     const loginUrl = new URL("/login", request.url);
 
-    toast.warning(
-      "Usuário não está logado! Por favor, realize o Login no Sistema.",
-    );
+    loginUrl.searchParams.set("error", "not-authenticated");
+
     return NextResponse.redirect(loginUrl);
   }
 
